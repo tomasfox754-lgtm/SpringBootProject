@@ -1,0 +1,64 @@
+{
+  "backend": "Spring Boot 3.5.7, perfil demo aislado",
+  "origenFrontend": "http://127.0.0.1:5500",
+  "total": 14,
+  "resultados": [
+    {
+      "prueba": "Preflight CORS desde Live Server",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Login de administrador y JWT sin roles",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Crear bodega y productos con los DTO reales",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Actualizar producto y consultar precio",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Entrada con varios productos e inventario de bodega",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Error de stock insuficiente interpretado por api.js",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Transferencia conserva stock global",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "CRUD sin inventario admite DELETE 204",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Reportes y auditorias con filtros",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Registro y login de empleado",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Empleado sin permiso para CRUD ni auditorias",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Empleado registra movimiento con su identidad",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Token invalido limpia la sesion",
+      "resultado": "correcto"
+    },
+    {
+      "prueba": "Error de conexion tiene un mensaje util",
+      "resultado": "correcto"
+    }
+  ],
+  "nota": "Se probo el modulo api.js real contra la API. No se ejecutaron interacciones de navegador."
+}

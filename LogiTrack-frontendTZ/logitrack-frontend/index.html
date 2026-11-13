@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f3ef">
+  <title>LogiTrack · Gestión de bodegas</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <!-- Acceso: el servidor valida las credenciales y devuelve el token. -->
+  <main id="pantalla-acceso" class="acceso">
+    <section class="presentacion">
+      <a class="marca" href="./index.html" aria-label="LogiTrack, inicio"><span class="marca-icono">LT</span>LogiTrack<span class="marca-punto">.</span></a>
+      <div class="presentacion-texto">
+        <p class="sobrelinea">GESTIÓN DE BODEGAS E INVENTARIO</p>
+        <h1>Tu inventario.<br>Todo en orden.</h1>
+        <p>Conecta tus bodegas y lleva el control de cada producto, cada movimiento y cada cambio.</p>
+        <div class="ilustracion" aria-hidden="true">
+          <svg viewBox="0 0 440 200" fill="none"><path d="M20 174H420M64 174V70L220 18L376 70V174M64 70H376M96 174V100H344V174M112 118H328M112 136H328M112 154H328" stroke="currentColor" stroke-width="2"/><path d="M145 173V146H186V173M145 146L165 136L206 146V174M186 146L206 136M242 174V122H290V174M242 122L266 109L314 122V174M290 122L314 109M266 109V122" stroke="currentColor" stroke-width="1.7"/><path d="M202 48H238M220 35V61" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="promesas"><span>01 &nbsp; Control de existencias</span><span>02 &nbsp; Historial de movimientos</span><span>03 &nbsp; Trazabilidad por usuario</span></div>
+      </div>
+      <p class="pie-presentacion">LOGITRACK S.A. <span>Una operación más clara.</span></p>
+    </section>
+    <section class="acceso-formulario">
+      <div class="tarjeta-acceso">
+        <p class="sobrelinea" id="acceso-etiqueta">BIENVENIDO DE NUEVO</p>
+        <h2 id="acceso-titulo">Inicia sesión</h2>
+        <p id="acceso-descripcion" class="texto-suave">Ingresa con tu cuenta para continuar.</p>
+        <form id="form-login">
+          <label for="login-usuario">Usuario</label>
+          <input id="login-usuario" name="username" autocomplete="username" minlength="3" maxlength="50" required placeholder="Escribe tu usuario">
+          <label for="login-clave">Contraseña</label>
+          <input id="login-clave" name="password" type="password" autocomplete="current-password" maxlength="60" required placeholder="Escribe tu contraseña">
+          <button class="boton primario ancho" type="submit">Iniciar sesión <span aria-hidden="true">→</span></button>
+        </form>
+        <form id="form-registro" hidden>
+          <label for="registro-usuario">Nombre de usuario</label>
+          <input id="registro-usuario" autocomplete="username" minlength="3" maxlength="50" required placeholder="Ej. empleado2">
+          <label for="registro-clave">Contraseña</label>
+          <input id="registro-clave" type="password" autocomplete="new-password" minlength="8" maxlength="60" required placeholder="Mínimo 8 caracteres">
+          <p class="ayuda">Tu cuenta se creará como empleado.</p>
+          <button class="boton primario ancho" type="submit">Crear cuenta <span aria-hidden="true">→</span></button>
+        </form>
+        <p id="error-acceso" class="mensaje-error" role="alert" hidden></p>
+        <p id="exito-acceso" class="mensaje-exito" role="status" hidden></p>
+        <div class="cambio-acceso"><span id="cambio-pregunta">¿Necesitas una cuenta?</span> <button type="button" id="cambiar-acceso" class="boton-texto">Crear cuenta de empleado</button></div>
+        <p class="nota-acceso">Tus movimientos quedan asociados a tu usuario.</p>
+      </div>
+      <small class="pie-acceso">Gestión simple. Información confiable.</small>
+    </section>
+  </main>
+
+  <!-- Aplicación: se muestra después de un login correcto. -->
+  <div id="pantalla-app" class="aplicacion" hidden>
+    <aside class="lateral">
+      <a class="marca" href="./index.html"><span class="marca-icono">LT</span>LogiTrack<span class="marca-punto">.</span></a>
+      <p class="etiqueta-menu">ESPACIO DE TRABAJO</p>
+      <nav id="menu" aria-label="Navegación principal">
+        <button data-vista="inicio" class="enlace-menu activo"><span>01</span> Resumen</button>
+        <button data-vista="bodegas" class="enlace-menu"><span>02</span> Bodegas</button>
+        <button data-vista="productos" class="enlace-menu"><span>03</span> Productos</button>
+        <button data-vista="movimientos" class="enlace-menu"><span>04</span> Movimientos</button>
+        <button data-vista="reportes" class="enlace-menu"><span>05</span> Reportes</button>
+        <button data-vista="auditorias" class="enlace-menu solo-admin"><span>06</span> Auditorías</button>
+      </nav>
+      <div class="nota-lateral"><span class="punto"></span> Un lugar para cada movimiento.</div>
+      <div class="usuario-lateral"><div id="avatar-usuario" class="avatar">U</div><div><strong id="nombre-usuario"></strong><small id="rol-usuario"></small></div><button id="cerrar-sesion" class="boton-salir" title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div>
+    </aside>
+    <div class="contenido">
+      <header class="encabezado"><div><p class="sobrelinea">LOGITRACK / OPERACIÓN</p><h1 id="titulo-vista">Resumen general</h1></div><button id="actualizar" class="boton secundario">↻ &nbsp; Actualizar</button></header>
+      <main class="contenido-principal">
+        <p id="estado-carga" class="estado-carga" role="status" hidden>Cargando información…</p>
+        <section id="vista-inicio" class="vista">
+          <div class="bienvenida"><div><p class="sobrelinea">TODO BAJO CONTROL</p><h2>Una mirada a tu operación.</h2><p class="texto-suave">Existencias y movimientos de todas tus bodegas.</p></div><button class="boton primario" data-accion="nuevo-movimiento">+ Registrar movimiento</button></div>
+          <div class="indicadores">
+            <article class="indicador"><div><span>Bodegas</span><span class="icono-indicador">▤</span></div><strong id="indicador-bodegas">—</strong><small>Ubicaciones registradas</small></article>
+            <article class="indicador"><div><span>Productos</span><span class="icono-indicador">□</span></div><strong id="indicador-productos">—</strong><small>Referencias en catálogo</small></article>
+            <article class="indicador"><div><span>Stock total</span><span class="icono-indicador">∑</span></div><strong id="indicador-stock">—</strong><small>Unidades entre bodegas</small></article>
+            <article class="indicador indicador-alerta"><div><span>Stock bajo</span><span class="icono-indicador">!</span></div><strong id="indicador-bajo">—</strong><small>Productos con menos de 10 unidades</small></article>
+          </div>
+          <div class="paneles-inicio">
+            <article class="panel"><div class="cabecera-panel"><div><h2>Existencias por bodega</h2><p class="texto-suave pequeno">Unidades almacenadas actualmente</p></div><span class="etiqueta">Inventario</span></div><div id="barras-bodegas" class="barras"></div></article>
+            <article class="panel"><div class="cabecera-panel"><div><h2>Productos más movidos</h2><p class="texto-suave pequeno">Por cantidad de unidades</p></div><span class="etiqueta">Top 5</span></div><div id="ranking-productos" class="ranking"></div></article>
+          </div>
+          <article class="panel"><div class="cabecera-panel"><div><h2>Últimos movimientos</h2><p class="texto-suave pequeno">La actividad más reciente de tu inventario</p></div><button class="boton-texto" data-ir="movimientos">Ver todos →</button></div><div id="tabla-recientes" class="contenedor-tabla"></div></article>
+        </section>
+        <section id="vista-bodegas" class="vista" hidden>
+          <div class="barra-herramientas"><div><h2>Tus bodegas</h2><p class="texto-suave">Consulta ubicaciones, capacidad y existencias.</p></div><button class="boton primario solo-admin" data-accion="nueva-bodega">+ Nueva bodega</button></div>
+          <article class="panel"><label class="sr-only" for="buscar-bodega">Buscar bodega</label><input id="buscar-bodega" class="buscador" placeholder="Buscar por nombre, ubicación o encargado…" type="search"><div id="tabla-bodegas" class="contenedor-tabla"></div><p id="contador-bodegas" class="contador"></p></article>
+        </section>
+        <section id="vista-productos" class="vista" hidden>
+          <div class="barra-herramientas"><div><h2>Catálogo de productos</h2><p class="texto-suave">Los cambios de stock se registran desde Movimientos.</p></div><button class="boton primario solo-admin" data-accion="nuevo-producto">+ Nuevo producto</button></div>
+          <article class="panel"><div class="filtros-linea"><label class="sr-only" for="buscar-producto">Buscar producto</label><input id="buscar-producto" class="buscador" placeholder="Buscar por nombre o categoría…" type="search"><label class="sr-only" for="filtro-stock">Filtrar stock</label><select id="filtro-stock"><option value="todos">Todo el inventario</option><option value="bajo">Stock bajo: menos de 10</option></select></div><div id="tabla-productos" class="contenedor-tabla"></div><p id="contador-productos" class="contador"></p></article>
+        </section>
+        <section id="vista-movimientos" class="vista" hidden>
+          <div class="barra-herramientas"><div><h2>Historial de movimientos</h2><p class="texto-suave">Entradas, salidas y transferencias entre bodegas.</p></div><button class="boton primario" data-accion="nuevo-movimiento">+ Registrar movimiento</button></div>
+          <article class="panel"><form id="form-filtro-fechas" class="filtros-fechas"><div><label for="fecha-desde">Desde</label><input id="fecha-desde" type="datetime-local" step="1" required></div><div><label for="fecha-hasta">Hasta</label><input id="fecha-hasta" type="datetime-local" step="1" required></div><button class="boton primario" type="submit">Filtrar</button><button id="limpiar-fechas" class="boton secundario" type="button">Ver todos</button></form><div id="tabla-movimientos" class="contenedor-tabla"></div><p id="contador-movimientos" class="contador"></p></article>
+        </section>
+        <section id="vista-reportes" class="vista" hidden>
+          <div class="barra-herramientas"><div><h2>Resumen de inventario</h2><p class="texto-suave">Stock distribuido y productos con mayor actividad.</p></div></div>
+          <div class="paneles-inicio"><article class="panel"><h2>Stock total por bodega</h2><div id="tabla-reporte-bodegas" class="contenedor-tabla"></div></article><article class="panel"><h2>Productos más movidos</h2><p class="texto-suave pequeno">Suma de entradas, salidas y transferencias.</p><div id="tabla-reporte-productos" class="contenedor-tabla"></div></article></div>
+        </section>
+        <section id="vista-auditorias" class="vista" hidden>
+          <div class="barra-herramientas"><div><h2>Trazabilidad de cambios</h2><p class="texto-suave">Consulta quién cambió los datos y qué valores se modificaron.</p></div><span class="etiqueta">Administración</span></div>
+          <article class="panel"><form id="form-filtro-auditorias" class="filtros-fechas"><div><label for="auditoria-usuario">Usuario</label><input id="auditoria-usuario" maxlength="50" placeholder="Todos los usuarios"></div><div><label for="auditoria-operacion">Operación</label><select id="auditoria-operacion"><option value="">Todas las operaciones</option><option value="INSERT">Creación</option><option value="UPDATE">Actualización</option><option value="DELETE">Eliminación</option></select></div><button class="boton primario" type="submit">Filtrar</button><button id="limpiar-auditorias" class="boton secundario" type="button">Limpiar</button></form><div id="tabla-auditorias" class="contenedor-tabla"></div><p id="contador-auditorias" class="contador"></p></article>
+        </section>
+        <footer class="pie-app">LogiTrack S.A. <span>Gestión de bodegas e inventario</span></footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Un dialog es una ventana modal nativa de HTML. -->
+  <dialog id="modal-bodega"><form id="form-bodega"><div class="cabecera-modal"><div><p class="sobrelinea">BODEGAS</p><h2 id="titulo-bodega">Nueva bodega</h2></div><button type="button" class="cerrar-modal" data-cerrar="modal-bodega" aria-label="Cerrar">×</button></div><input id="bodega-id" type="hidden"><label for="bodega-nombre">Nombre</label><input id="bodega-nombre" maxlength="80" required><label for="bodega-ubicacion">Ubicación</label><input id="bodega-ubicacion" maxlength="150" required><div class="dos-campos"><div><label for="bodega-capacidad">Capacidad (unidades)</label><input id="bodega-capacidad" type="number" min="1" max="1000000000" step="1" required></div><div><label for="bodega-encargado">Encargado</label><input id="bodega-encargado" maxlength="100" required></div></div><p class="error-formulario mensaje-error" role="alert" hidden></p><div class="acciones-modal"><button type="button" class="boton secundario" data-cerrar="modal-bodega">Cancelar</button><button type="submit" class="boton primario">Guardar bodega</button></div></form></dialog>
+  <dialog id="modal-producto"><form id="form-producto"><div class="cabecera-modal"><div><p class="sobrelinea">PRODUCTOS</p><h2 id="titulo-producto">Nuevo producto</h2></div><button type="button" class="cerrar-modal" data-cerrar="modal-producto" aria-label="Cerrar">×</button></div><input id="producto-id" type="hidden"><label for="producto-nombre">Nombre</label><input id="producto-nombre" maxlength="80" required><label for="producto-categoria">Categoría</label><input id="producto-categoria" maxlength="60" required><label for="producto-precio">Precio</label><input id="producto-precio" type="number" min="0.01" max="9999999999.99" step="0.01" required><p class="ayuda">Los productos nuevos comienzan sin existencias. Registra una entrada para agregar stock.</p><p class="error-formulario mensaje-error" role="alert" hidden></p><div class="acciones-modal"><button type="button" class="boton secundario" data-cerrar="modal-producto">Cancelar</button><button type="submit" class="boton primario">Guardar producto</button></div></form></dialog>
+  <dialog id="modal-movimiento" class="modal-amplio"><form id="form-movimiento"><div class="cabecera-modal"><div><p class="sobrelinea">INVENTARIO</p><h2>Registrar movimiento</h2></div><button type="button" class="cerrar-modal" data-cerrar="modal-movimiento" aria-label="Cerrar">×</button></div><label for="movimiento-tipo">Tipo de movimiento</label><select id="movimiento-tipo"><option value="ENTRADA">Entrada de productos</option><option value="SALIDA">Salida de productos</option><option value="TRANSFERENCIA">Transferencia entre bodegas</option></select><div class="dos-campos"><div id="campo-origen" hidden><label for="movimiento-origen">Bodega de origen</label><select id="movimiento-origen"></select></div><div id="campo-destino"><label for="movimiento-destino">Bodega de destino</label><select id="movimiento-destino" required></select></div></div><div class="cabecera-detalles"><h3>Productos</h3><button type="button" id="agregar-detalle" class="boton-texto">+ Agregar producto</button></div><div id="detalles-movimiento"></div><p class="ayuda">El movimiento se registrará con tu usuario y la fecha actual. No se podrá editar después.</p><p class="error-formulario mensaje-error" role="alert" hidden></p><div class="acciones-modal"><button type="button" class="boton secundario" data-cerrar="modal-movimiento">Cancelar</button><button type="submit" class="boton primario">Registrar movimiento</button></div></form></dialog>
+  <dialog id="modal-inventario" class="modal-amplio"><div class="cabecera-modal"><div><p class="sobrelinea">EXISTENCIAS</p><h2 id="titulo-inventario">Inventario de bodega</h2></div><button type="button" class="cerrar-modal" data-cerrar="modal-inventario" aria-label="Cerrar">×</button></div><div id="tabla-inventario" class="contenedor-tabla"></div><div class="acciones-modal"><button class="boton secundario" data-cerrar="modal-inventario">Cerrar</button></div></dialog>
+  <dialog id="modal-auditoria" class="modal-amplio"><div class="cabecera-modal"><div><p class="sobrelinea">AUDITORÍA</p><h2 id="titulo-auditoria">Detalle del cambio</h2></div><button type="button" class="cerrar-modal" data-cerrar="modal-auditoria" aria-label="Cerrar">×</button></div><p id="descripcion-auditoria" class="texto-suave"></p><div class="dos-campos"><div><h3>Valores anteriores</h3><pre id="auditoria-antes"></pre></div><div><h3>Valores nuevos</h3><pre id="auditoria-despues"></pre></div></div></dialog>
+  <dialog id="modal-confirmar"><div class="cabecera-modal"><h2>Eliminar registro</h2><button type="button" class="cerrar-modal" data-cerrar="modal-confirmar" aria-label="Cerrar">×</button></div><p id="texto-confirmar"></p><p class="ayuda">No se puede eliminar un registro que tenga inventario o movimientos asociados.</p><p id="error-confirmar" class="mensaje-error" role="alert" hidden></p><div class="acciones-modal"><button class="boton secundario" data-cerrar="modal-confirmar">Cancelar</button><button id="confirmar-eliminar" class="boton peligro">Eliminar</button></div></dialog>
+  <div id="notificacion" class="notificacion" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
