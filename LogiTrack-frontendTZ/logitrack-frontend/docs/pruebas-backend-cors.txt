@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.logitrack.LogitrackIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.02 s -- in com.logitrack.LogitrackIntegrationTest
