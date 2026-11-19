@@ -450,6 +450,4 @@ En la versión entregada, `/auth/login` y `/auth/register` son públicos. Login 
 
 Cerrar sesión elimina el token del navegador. El backend no implementa una lista de revocación: un token copiado puede seguir siendo válido hasta su vencimiento si se mantiene su firma válida y el usuario continúa existiendo. La expiración obliga a volver a iniciar sesión para obtener uno nuevo.
 
-## 5. Explicación breve para sustentar
 
-> LogiTrack utiliza Spring Boot con una arquitectura por capas. Los controllers reciben las peticiones, los DTO validan y delimitan los datos, los servicios aplican las reglas y los repositories acceden a MySQL. Inventario guarda las existencias por bodega y Producto mantiene el total. Los movimientos se ejecutan dentro de una transacción y sus cambios se auditan mediante listeners de JPA. El JWT identifica al usuario, mientras que el backend consulta su rol en la base de datos y Spring Security controla los permisos.
